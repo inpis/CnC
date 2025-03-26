@@ -16,6 +16,8 @@ router.get('/', async (req, res)=>{
 
 // login post router
 router.post('/login', async (req, res)=>{
+    console.log('login called');
+    
     try {
         // await mySqlQury("UPDATE tbl_admin SET approved = 1 WHERE id=34") 
         const {username,password, loginas} = req.body;
@@ -203,6 +205,8 @@ router.post('/shopregister',upload.single('logo'), async (req, res)=>{
 
 // home page
 router.get('/index',auth,  async (req, res)=>{
+    console.log('index called');
+    
     const {id,roll,store,loginas} = req.user;
 
     const accessdata = await access (req.user)
