@@ -29,14 +29,6 @@ const accountRouter = require('./routers/account');
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
-app.use((req, res, next) => {
-  console.log("Hostname:", req.hostname); // Debugging: Check what hostname is being used
-  if (req.hostname === 'localhost' || req.hostname.includes('.')) {
-      return next();
-  }
-  res.status(403).send("We only allow subdomains");
-});
-
 
 app.use(session({
     secret:'flashblog',
