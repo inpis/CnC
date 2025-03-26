@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <!-- meta and links start -->
+    <%- include('templet/meta')-%>
+</head>
+
+<body>
+    <%- include('templet/preloder_topbar_sidebar',{titel: language.Cash_Section })-%>
+
+        <!--********** Content body start **********-->
+
+        <div class="content-body">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card mb-3">
+                            <div class="card-body pb-">
+                                
+                                <h3><%=storname%></h3>
+
+                                <div class="nav">
+                                    <ul class="nav nav-tabs page-header-tabs shadow-sm">
+                                        <li class="nav-item">
+                                          <a class="nav-link" href="/account/payoutdetails/<%= storeid %>"><%= language.Account_Detail %> </a>
+                                        </li>
+                                        <li class="nav-item">
+                                          <a class="nav-link active" href="/account/payoutransections/<%= storeid %>"><%= language.Transection_List %> </a>
+                                        </li>
+                                        
+                                      </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h3 class="card-title"><%= language.Transection_List %> </h3>
+                            </div>
+                            <div class="d-none">
+                                <input type="hiden" name="sym" value="<%= accessdata.symbol %>">
+                                <input type="hiden" name="pls" value="<%= accessdata.plac %>">
+                                <input type="hiden" name="thousands_separator" value="<%= accessdata.thousands_separator %>">
+                            </div>
+                            <div class="card-body">
+                                <form id="cashform" action="/account/payouttransefilter" method="post">
+                                    <div class="row">
+                                        
+                                        <div class="col">
+                                            <label class="form-label"><%= language.Account %> </label>
+                                            <select class="default-select form-control wide mb-3" name="account"
+                                                id="account" required>
+                                                <option value selected disabled>Select Account</option>
+                                                <% account_list.forEach(function(data){ %>
+                                                    <option value="<%= data.id %>"  <%= data.id == account ? 'selected' : '' %>><%= data.ac_name %></option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col">
+                                            <label class="form-label"><%= language.Start_Date %> </label>
+                                            <input type="date" id="cashstart" class="form-control" name="start_date" value="<%= start_date %>" required>
+                                            <input type="hidden" name="store_id" value="<%= storeid %>">
+                                        </div>
+
+                                        <div class="col">
+                                            <label class="form-label"><%= language.End_Date %> </label>
+                                            <input type="date" id="cashend" class="form-control" name="end_date" value="<%= end_date %>" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <p class="text-danger d-none m-0 pb-2" id="details_errors">Select All Detail</p>
+                                    </div>
+
+                                </form>
+
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-sm btn-dark col-3 mx-3" id="cashclick" type="submit"><%= language.Filter %>  </button>
+
+                                    <a href="/account/payoutransections/<%= storeid %>" class="btn btn-sm btn-dark col-3 mx-3"><%= language.Reset %> </a>
+
+                                    <button class="btn btn-sm btn-dark col-3 mx-3" id="cashdownloadbtn"><%= language.Download %> </button>
+
+                                </div>
+
+                                <hr>
+
+                                <!----- table ----->
+
+                                <div class="table-responsive">
+                                    <table id="example3" class="display table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"><%= language.Date %> </th>
+                                                <th scope="col"><%= language.Account %> </th>
+                                                <th scope="col"><%= language.Type %> </th>
+                                                <th scope="col"><%= language.Description %> </th>
+                                                <th scope="col"><%= language.Debit %> </th>
+                                                <th scope="col"><%= language.Credit %> </th>
+                                                <th scope="col"><%= language.Balance %> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% transection_list.forEach(function(data, i){ %>
+                                                <tr>
+                                                    <td>
+                                                        <% let Order_date = new Date(data.date) %>
+                                                        <% let Order_day = (Order_date.getDate() < 10 ? '0' : '') + Order_date.getDate() %>
+                                                        <% let Order_month = ((Order_date.getMonth()+1) < 10 ? '0' : '') + (Order_date.getMonth()+1) %>
+                                                        <% let Order_year = Order_date.getFullYear() %>
+                                                        <% let Order_fullDate = `${Order_year}-${Order_month}-${Order_day}` %>
+
+                                                        <%= Order_fullDate %>
+                                                    </td>
+                                                    <td><%= data.ac_name %></td>
+                                                    <td><%= data.transec_type %></td>
+                                                    <td><%= data.transec_detail %></td>
+                                                    <td class="symbol"><%= data.debit_amount %></td>
+                                                    <td class="symbol"><%= data.credit_amount %></td>
+                                                    <td class="symbol"><%= data.balance_amount %></td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--********** Content body end **********-->
+
+        </div>
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p><%= language.Copyright %> © <%= language.Designed %> &amp; <%= language.Developed_by %> <a href="#" target="_blank">KMS</a> 2023</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        </div>
+
+        <!--********** Main wrapper end **********-->
+        <%- include('templet/script')-%>
+</body>
+
+</html>

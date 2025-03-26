@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <!-- meta and links start -->
+    <%- include('templet/meta')-%> 
+</head>
+<body>
+    <%- include('templet/preloder_topbar_sidebar',{titel:  language.Bulk_Upload_Services })-%> 
+        
+        <!--********** Content body start **********-->
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"><%= language.Bulk_Upload_Services %> </h4>
+                                <a href="/services/demo_csv" class="btn btn-primary text-center"><%= language.Demo_Excel_File %> </a>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-validation">
+                                    
+                                    <form class="needs-validation" action="/services/add_csv" method="post" enctype="multipart/form-data">
+
+                                        <div class="mb-3">
+                                            <label><%= language.Services_file %> </label>
+                                            <div class="form-file w-50 mb-3">
+                                                <input type="file" name="csv_file" class="form-file-input form-control">
+                                            </div>
+                                            <% if (accessdata.roll.id == '1') { %>
+                                                <h5><b><%= language.Notes %> :</b> <span class="text-danger">Please upload an image to the designated path "public/uploads" and include the image name in a CSV file, such as "myimage.png"</span></h5>
+                                            <% } else { %>
+                                                <h5><b><%= language.Notes %> :</b> <span class="text-danger">Please deliver the image zip file to the master admin so that they can upload it to the server. In the CSV file's image field, please include the image name, for example, "myimage.png"</span></h5>
+                                            <% } %>
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button class="btn btn-primary w-25" type="submit" id="submit"><%= language.Submit %> </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+        
+        <!--********** Content body end **********-->
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p><%= language.Copyright %> © <%= language.Designed %> &amp; <%= language.Developed_by %> <a href="#" target="_blank">KMS</a> 2024</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+    </div>
+
+        <!--********** Main wrapper end **********-->
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <%- include('templet/script')-%>
+
+</body>
+</html>

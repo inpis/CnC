@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+
+<head>
+    <!-- meta and links start -->
+    <%- include('templet/meta')-%>
+
+</head>
+
+<body>
+    <%- include('templet/preloder_topbar_sidebar',{titel: language.Staff })-%>
+
+        <!--********** Content body start **********-->
+
+        <div class="content-body">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card ">
+                            <div class="card-header">
+                                <h3 class="card-title"><%= language.Staff %></h3>
+                                <button class="btn btn-rounded btn-primary <%= accessdata.roll.staff.includes('write') ?'':'d-none' %>" data-bs-toggle="modal"
+                                    data-bs-target="#staff_add"><span class="btn-icon-start text-primary"><i
+                                            class="fa fa-plus color-info"></i></span><%= language.Add_New_Staff %> </button>
+                            </div>
+                            <div class="card-body ">
+                                <div class="table-responsive">
+                                    <table id="example3" class="display table-responsive-lg">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th><%= language.Staff_Name %> </th>
+                                                <th><%= language.Role %> </th>
+                                                <th><%= language.Contact %> </th>
+                                                <th  class="<%= ismulty ? '': 'd-none' %>"><%= language.Shop_Name %> </th>
+                                                <th><%= language.Status %> </th>
+                                                <th class="<%= accessdata.roll.staff.includes('edit') || accessdata.roll.staff.includes('delete') ?'':'d-none' %>"><%= language.Action %> </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% staffdata.forEach(function(data, i){ %>
+                                            <tr>
+                                                <td> <%=i + 1  %> </td>
+                                                <td> <%=data.name %></td>
+                                                <td> <span class="badge light badge-secondary"><%=data.roll %></span> </td>
+                                                <td>
+                                                    <div><%=data.number %></div>
+                                                    <div><%=data.email %></div>
+                                                </td>
+                                                <td class="<%= ismulty ? '': 'd-none' %>"><%=data.store %></td>
+                                                <td>
+                                                    <%if( data.approved == 1){ %>
+                                                        <span class="badge light badge-success ">Active</span>
+                                                    <% }else{ %>
+                                                        <span class="badge light badge-warning">Deactive</span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="btn btn-primary shadow sharp me-1 <%= accessdata.roll.staff.includes('edit') ?'':'d-none' %>" id="update_staff"
+                                                        data-bs-toggle="modal" data-bs-target="#staff_update"
+                                                        data-id="<%=data.id %>" data-name="<%=data.name %>"
+                                                        data-number="<%=data.number %>"
+                                                        data-roll_id="<%=data.roll_id %>"
+                                                        data-email="<%=data.email %>"
+                                                        data-username="<%=data.username %>"
+                                                        data-password="<%=data.password %>"
+                                                        data-approved="<%=data.approved %>">
+                                                        <i class="fas fa-pencil-alt"></i></a>
+
+                                                    <a href="/tool/deletstaff/<%= data.id %>" class="btn btn-danger shadow sharp me-1 <%= accessdata.roll.staff.includes('delete') ?'':'d-none' %>" id="delete">
+                                                        <i class="fa fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--********** Content body end **********-->
+
+        <!-- Modal update -->
+        <div class="modal fade" id="staff_update">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%= language.Edit_Staff_Details %> </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" id="update_staff_form" method="post" class="need-validation">
+
+                            <div class="row g-1 align-items-center">
+                                <div class="form-group">
+                                    <label><strong> <%= language.Staff_Name %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control " name="name_update" id="name_update"
+                                        placeholder="Enter Staff Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Phone_Number %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control " name="number_update" id="number_update"
+                                        placeholder="Enter Phone Number" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Email %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control " name="email_update" id="email_update"
+                                        placeholder="Enter Email" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Username %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control " name="username_update" id="username_update"
+                                        placeholder="Enter User Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong> <%= language.Password %>   </strong><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control " name="password_update" id="password_update"
+                                        placeholder="Enter Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label"><strong> <%= language.Roll_List %>  </strong><span class="text-danger">*</span></label>
+                                    <select class="default-select form-control wide mb-3" name="roll_list_update" id="update_staff_roll1">
+                                        <% rolldata.forEach(function(data, i){ %>
+                                            <option value="<%=data.id%>"><%= data.roll %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="active_update"  name="active_update" value="1">
+                                        <label class="form-check-label" for="employee"><%= language.Is_Active %>  ?</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    data-bs-dismiss="modal"><%= language.Cancel %></button>
+                                <button type="submit" class="btn btn-sm  btn-primary"><%= language.Save %> </button>
+                            </div>
+                        </form>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal add -->
+        <div class="modal fade" id="staff_add">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><%= language.Add_New_Staff %> </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form action="/tool/addstaff" method="post" class="need-validation">
+                        <div class="modal-body">
+
+                            <div class="row g-1 align-items-center">
+                                <div class="form-group">
+                                    <label><strong> <%= language.Staff_Name %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control " name="name" id="name"
+                                        placeholder="Enter Staff Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Phone_Number %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control " name="number" id="number"
+                                        placeholder="Enter Phone Number" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Email %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control " name="email" id="email"
+                                        placeholder="Enter Email" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong><%= language.Username %>  </strong><span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control " name="username" id="username"
+                                        placeholder="Enter User Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><strong> <%= language.Password %>   </strong><span class="text-danger">*</span></label>
+                                    <input type="password" class="form-control " name="password" id="password"
+                                        placeholder="Enter Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label"><strong> <%= language.Roll_List %>  </strong><span class="text-danger">*</span></label>
+                                    <select class="default-select form-control wide mb-3" name="roll_list">
+                                        <option value selected disabled>Select Roll</option>
+                                        <% rolldata.forEach(function(data, i){ %>
+                                            <option value="<%= data.id %>"><%= data.roll %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="active" name="active" value="0" >
+                                    <label class="form-check-label"
+                                        for="employee"><%= language.Is_Active %>  ?</label>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    data-bs-dismiss="modal"><%= language.Cancel %></button>
+                                <button type="submit" class="btn btn-sm  btn-primary"><%= language.Save %> </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p><%= language.Copyright %> © <%= language.Designed %> &amp; <%= language.Developed_by %> <a href="#" target="_blank">KMS</a> 2024</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        </div>
+
+        <!--********** Main wrapper end **********-->
+        <%- include('templet/script')-%>
+
+</body>
+
+
+</html>

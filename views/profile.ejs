@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <!-- meta and links start -->
+    <%- include('templet/meta')-%>
+
+</head>
+
+<body>
+    <%- include('templet/preloder_topbar_sidebar',{titel: language.Profile })-%>
+
+        <!--********** Content body start **********-->
+
+        <div class="content-body">
+
+            <div class="container-fluid">
+
+
+                            <div class="row justify-content-center">
+
+                                <div class="col-xl-10">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="settings-form">
+                                                <center class="mb-5">
+                                                    <span>
+                                                        <% if(accessdata.logas == 'custmor'){ %>
+                                                            <img id="file-preview" class="img-fluid rounded-circle" src="/images/profile-default.png" width="100px" height="100px" alt="image">
+                                                        <% } else if(accessdata.isstore == true){ %>
+                                                            <img id="file-preview" class="img-fluid rounded-circle" src="uploads/<%= accessdata.topbardata.logo %>" width="100px" height="100px" alt="image">
+                                                        <% } else { %>
+                                                            <img id="file-preview" class="img-fluid rounded-circle" src="uploads/<%= accessdata.topbardata.img %>" width="100px" height="100px" alt="image">
+                                                        <% } %>
+                                                    </span>
+                                                </center>
+                                                <hr>
+                                                <% if(accessdata.logas == 'custmor'){ %>
+                                                <form action="/updatecustompro" method="post" >
+
+                                                    <div class="row">
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label"><%= language.Name %> </label>
+                                                            <input type="text" placeholder="First Name" class="form-control"
+                                                                name="name" value="<%=accessdata.topbardata.name %>" required>
+                                                        </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label"><%= language.Contact_Number %> </label>
+                                                            <input type="number" placeholder="Contact Number" class="form-control"
+                                                                name="number" value="8888888888" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="mb-3 col-md-12">
+                                                            <label class="form-label"><%= language.Email %> </label>
+                                                            <input type="email" placeholder="Email" class="form-control"
+                                                                name="email" value="<%=accessdata.topbardata.email %>" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label"><%= language.Username %> </label>
+                                                            <input type="text" placeholder="User Name" class="form-control"
+                                                                name="username" value="<%=accessdata.topbardata.username %>" required>
+                                                        </div>
+
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label"><%= language.Password %> </label>
+                                                            <input type="text" placeholder="Password" class="form-control"
+                                                                name="password" value="<%=accessdata.topbardata.password %>" required>
+                                                        </div>
+                                                        
+                                                    </div>
+        
+                                                    <button class="btn btn-primary" type="submit"><%= language.Submit %> </button>
+                                                </form>
+                                                <% } else if(accessdata.isstore == true){ %>
+                                                   
+                                                    
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Name %> </label>
+                                                                <input type="text" placeholder="First Name" class="form-control"
+                                                                    name="name" value="<%=accessdata.topbardata.name %>" required>
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Contact_Number %></label>
+                                                                <input type="number" placeholder="Contact Number" class="form-control"
+                                                                    name="number"  value="8888888888" required>
+                                                            </div>
+                                                        </div>
+    
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-12">
+                                                                <label class="form-label"><%= language.Email %> </label>
+                                                                <input type="email" placeholder="Email" class="form-control"
+                                                                    name="email"  value="<%=accessdata.topbardata.store_email %>" required>
+                                                            </div>
+                                                            
+                                                        </div>
+    
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Username %></label>
+                                                                <input type="text" placeholder="User Name" class="form-control"
+                                                                    name="username"  value="<%=accessdata.topbardata.username %>" required>
+                                                            </div>
+    
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Password %> </label>
+                                                                <input type="text" placeholder="Password" class="form-control"
+                                                                    name="password"  value="<%=accessdata.topbardata.password %>" required>
+                                                            </div>
+                                                            
+                                                        </div>
+            
+                                                       <hr class="mt-5">
+
+                                                      
+                                                   
+                                                <% } else { %>
+                                                    <form action="/updatestaff" method="post" enctype="multipart/form-data">
+                                                    
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Name %> </label>
+                                                                <input type="text" placeholder="First Name" class="form-control"
+                                                                    name="name"  value="<%=accessdata.topbardata.name %>" required>
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Contact_Number %> </label>
+                                                                <input type="number" placeholder="Contact Number" class="form-control"
+                                                                    name="number"  value="8888888888" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Email %> </label>
+                                                                <input type="email" placeholder="Email" class="form-control"
+                                                                    name="email"  value="<%=accessdata.topbardata.email %>" required>
+                                                            </div>
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Choose_a_photo %> </label>
+                                                                <input type="file" placeholder="photo" class="form-control"
+                                                                    name="image" onchange="showPreview(event)">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Username %> </label>
+                                                                <input type="text" placeholder="User Name" class="form-control"
+                                                                    name="username"  value="<%=accessdata.topbardata.username %>" required>
+                                                            </div>
+
+                                                            <div class="mb-3 col-md-6">
+                                                                <label class="form-label"><%= language.Password %> </label>
+                                                                <input type="text" placeholder="Password" class="form-control"
+                                                                    name="password" value="<%=accessdata.topbardata.password %>" required>
+                                                            </div>
+                                                            
+                                                        </div>
+
+                                                        <button class="btn btn-primary" type="submit"><%= language.Submit %></button>
+                                                    </form>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                      
+            </div>
+        </div>
+ <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p><%= language.Copyright %> © <%= language.Designed %> &amp; <%= language.Developed_by %> <a href="#" target="_blank">KMS</a> 2024</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        </div>
+
+        <!--********** Main wrapper end **********-->
+        <%- include('templet/script')-%>
+</body>
+
+</html>

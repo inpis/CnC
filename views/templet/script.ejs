@@ -1,0 +1,190 @@
+<%- scriptFile -%> 
+<script src="../../js/plugins-init/chartjs-init.js"></script>
+<script>
+    $(document).on("click", "#printcheck", function(){
+   var paid = Number($('input[name=paid_amount]').val())
+   var date = $('input[name=deliverydate]').val()
+   var date_hidden = $('input[name=deliverydate_hidden]').val()
+   var payment_type = $('#POS_payment_type_list').val()
+   if(paid > 0){
+      if(!payment_type){
+         return toastr.warning('Please Select Payment Type')
+      }
+   }
+   if(date < date_hidden){
+      return document.getElementById("POS_worning").innerHTML = "Enter Delivery Date";
+   }
+   $("#posprintform").submit()
+})
+
+let ordersize = $('.load_data').length;
+let v=10;
+
+$('#loadMoreorder').click(function () {
+       v = (v + 10 <= ordersize) ? v + 10 : ordersize;
+       $('.load_data:lt('+v+')').show();
+       // hide load more button if all items are visible
+       if($(".load_data:visible").length >= ordersize ){ $("#loadMoreorder").hide(); }
+      var baseUrl = window.location.origin;
+      let from = v
+      v = parseFloat(ordersize) + v
+      $.ajax({
+         type: 'POST',
+         url: baseUrl + '/order/getmore',
+         dataType: 'json',
+         data: {from},
+         success: function(res) {
+            if (res.orderlists != "") {
+               $.each(res.orderlists, function(index, value) {
+                  let Order_date = new Date(value.order_date)
+                  let Order_day = (Order_date.getDate() < 10 ? '0' : '') + Order_date.getDate()
+                  let Order_month = ((Order_date.getMonth()+1) < 10 ? '0' : '') + (Order_date.getMonth()+1)
+                  let Order_year = Order_date.getFullYear()
+                  let Order_fullDate = `${Order_year}-${Order_month}-${Order_day}`
+                  let Delivery_date = new Date(value.delivery_date)
+                  let Delivery_day = (Delivery_date.getDate() < 10 ? '0' : '') + Delivery_date.getDate()
+                  let Delivery_month = ((Delivery_date.getMonth()+1) < 10 ? '0' : '') + (Delivery_date.getMonth()+1)
+                  let Delivery_year = Delivery_date.getFullYear()
+                  let Delivery_fullDate = `${Delivery_year}-${Delivery_month}-${Delivery_day}`
+                  let data = "<tr class='load_data'>"+
+                                 "<td>"+
+                                     "<p class='text-sm mb-0 text-nowrap'>"+
+                                         "<span class='me-1'>Request ID :</span>"+
+                                         "<span>"+ value.order_id +"</span>"+
+                                     "</p>"+
+                                     "<p class='text-sm mb-0 text-nowrap'>"+
+                                         "<span class='me-1'>Order date :</span>"+
+                                         "<span>"+ Order_fullDate +"</span>"+
+                                     "</p>"+
+                                     "<p class='text-sm mb-0 text-nowrap'>"+
+                                          "<span class='me-1'>Delivery Date :</span>"+
+                                          "<span>"+ Delivery_fullDate +"</span>"+
+                                     "</p>"+
+                                 "</td>"+
+                                 "<td>"+
+                                     "<p class='text-sm px-2 mb-0 text-nowrap'>"+ value.name +"</p>"+
+                                     "<p class='text-sm px-2 mb-0'>"+ value.number +"</p>"+
+                                 "</td>"+
+                                 "<td>"+
+                                     "<p class='text-sm px-2 mb-0 text-nowrap symbol'>"+ value.gross_total +"</p>"+
+                                 "</td>"+
+                                 "<td>"
+                                 if(value.order_status == 1){
+                                    data += "<button type='button' class='btn btn-dark btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }else if(value.order_status == 2){
+                                    data += "<button type='button' class='btn btn-warning btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }else if(value.order_status == 3){
+                                    data += "<button type='button' class='btn btn-secondary btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }else if(value.order_status == 4){
+                                    data += "<button type='button' class='btn btn-info btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }else if(value.order_status == 5){
+                                    data += "<button type='button' class='btn btn-danger btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }else if(value.order_status == 6){
+                                    data += "<button type='button' class='btn btn-danger btn-xxs text-nowrap' disabled>"+ value.orderStatus +"</button>"
+                                 }
+                                 data += "</td>"+
+                                          "<td>"+
+                                              "<p class='text-sm mb-0 text-nowrap'>"+
+                                                  "<span class='me-2'>Total Amount :</span>"+
+                                                  "<span class='symbol'>"+  value.gross_total +"</span>"+
+                                              "</p>"+
+                                              "<p class='text-sm mb-1 text-nowrap'>"+
+                                                  "<span class='me-2'>Paid Amount :</span>"+
+                                                  "<span class='symbol'>"+  value.paid_amount +"</span>"+
+                                              "</p>"
+                                 let aedit = ""
+                                 if (!res.accessdata.roll.orders.includes('edit')) aedit = "disabled"
+                                 if(value.balance_amount > 0){
+                                    if(res.accessdata.logas == 'custmor'){
+                                       data += "<button type='button' class='btn light  btn-info btn-xxs mb-2' disabled>Pending</button>"
+                                    }else{
+                                       data += "<button  onclick='open_patment_model("+ value.id +")'"+
+                                       "type='button' class='btn light btn-success btn-xxs mb-2' "+ aedit +">Add Payment</button>"
+                                    }
+                                 }else{
+                                       data += "<button type='button' class='btn btn-dark btn-xxs mb-2' disabled>Fully Paid</button>"
+                                 }
+                                 let login = ""
+                                 if (res.login != 'master') login = 'd-none'
+                                 data += "</td>"+
+                                         "<td class='"+ login +"'>"+
+                                             "<p class='text-sm mb-0 text-uppercase'>"+ value.storeName +"</p>"+
+                                         "</td>"+
+                                         "<td>"
+                                 if(value.balance_amount > 0){
+                                    if (value.order_status != 6) {
+                                       data +=  "<a href='/admin/edit/"+ value.id +"' type='button' class='btn light btn-info btn-xs'>Edit</a>"
+                                    }
+                                 }
+                                 data += "</td>"+
+                                          "<td>"+
+                                             "<a href='/order/view/"+ value.id +"' type='button' class='btn light btn-info btn-xs'>View</a>"+
+                                          "</td>"+
+                                          "<td>"+
+                                             "<button type='button' class='btn light btn-warning btn-xs' id='print_barcode' data-bs-toggle='modal' data-bs-target='#exampleModalLong'"+
+                                             "data-id='"+ value.id +"'><i class='feather icon-printer'></i></button>"+
+                                          "</td>"+
+                                       "</tr>"
+                     $('#order_list_tbl').append(data)
+               })
+               pagetablecurrency()
+            } else {
+               $("#orderloadbtn").addClass("d-none")
+            }
+         }
+      })
+});
+</script>
+<% if(success.length > 0){ %>
+        <script>
+            (function ($) {
+        "use strict"
+        console.log('<%=success%>');
+        toastr.success('<%=success%>', {
+                        timeOut: 500000000,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                })(jQuery)
+        </script>
+    <% } %>
+    <% if(error.length > 0){ %>
+        <script>
+            (function ($) {
+        "use strict"
+        
+
+        toastr.error('<%=error%>',{
+                        timeOut: 500000000,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        positionClass: "toast-top-right",
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "300",
+                        hideDuration: "1000",
+                        extendedTimeOut: "1000",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                })(jQuery)
+        </script>
+    <% } %>

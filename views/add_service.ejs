@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+
+<head>
+    <!-- meta and links start -->
+    <%- include('templet/meta')-%>
+
+</head>
+
+<body>
+    <%- include('templet/preloder_topbar_sidebar',{titel: language.Services  })-%>
+
+        <!--********** Content body start **********-->
+
+        <div class="content-body">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card ">
+
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title"><%= language.Add_Services_Details %> </h3>
+                                </div>
+                                <div>
+                                    <a href="/services/csv_file" class="btn btn-rounded btn-primary mx-3"><%= language.Bulk_Upload_Services %></a>
+                                    <button type="button" class="btn btn-rounded btn-primary" onclick="history.back()"><i
+                                        class="la la-undo"></i> <%= language.Go_Back %>  </button>
+                                </div>
+                            </div>
+                            <div class="card-body ">
+                                <form action="/services/addservice" method="post" class="need-validation" enctype="multipart/form-data">
+                                    <div class="row">
+
+
+                                        <!-- left side -->
+
+                                        <div class="col-xl-9">
+                                            <div class="col-md-7 mb-1 <%= ismulty ? '': 'd-none' %>">
+                                                <div class="form-group">
+                                                    <label class="form-label"><strong> <%= language.Store_List %> </strong><span class="text-danger">*</span></label>
+                                                    <select class="default-select form-control wide mb-3" name="storeid"
+                                                        id="add_servie_storelist" >
+                                                        <option value="1" selected disabled > Select Store </option>
+                                                        <% storeList.forEach(function(x){ %>
+                                                            <option value="<%= x.id %>"><%= x.name %></option>
+                                                        <% }) %>
+                                                        
+                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-7">
+                                                    <label class="form-label"><%= language.Service_Name %> </label>
+                                                    <input type="text" placeholder="Enter Service Name"
+                                                        class="form-control" name="name" required>
+                                                    <input type="hidden" id="servalid" value="0" min=1 required>
+                                                </div>
+                                               
+
+                                                <!-- image Upload -->
+                                                <div class="col-md-4 mt-2 ">
+                                                    <label class="btn btn-primary mt-4" for="file-1"
+                                                        style="width: 100%;"><%= language.Upload_Image %> </label>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+
+                                        <!-- right side -->
+                                        <div class="col-xl-3">
+                                            <div class="center">
+                                                <div class="form-input">
+                                                    <div class="preview m-4 mt-0">
+                                                        <img id="file-preview" width="160" src="../images/one.png"
+                                                            alt="image">
+                                                    </div>
+
+                                                    <input class="d-none" type="file" id="file-1" name="image"
+                                                        onchange="showPreview(event)" required>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- table -->
+
+                                        <div class="col-xl-12 mt-4">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th>#</th> -->
+                                                            <th><%= language.Service_Type %> </th>
+                                                            <th><%= language.Service_Price %> </th>
+                                                            <th><%= language.Action %> </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tblPage">
+
+                                                    </tbody>
+                                                </table>
+
+                                                <div class="d-flex justify-content-end m-1">
+                                                    <button type="button" class="btn btn-outline-secondary btn-xs"
+                                                        id="add_service"><%= language.Add_Service_Type %> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer mt-4">
+                                            <div class="row">
+                                                <!-- left side -->
+                                                <div class="col-xl-9">
+                                                    <div class="form-group">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" id="active"
+                                                                name="active" value="0">
+                                                            <label class="form-check-label" for="employee"><%= language.Is_Active %> 
+                                                                ?</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- right side -->
+                                                <div class="col-xl-3">
+                                                    <button type="button" class="btn btn-secondary" onclick="history.back()"><%= language.Cancel %> </button>
+
+                                                    <button type="submit" id="add" class="btn btn-primary"><%= language.Submit %></button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!--********** Content body end **********-->
+
+
+        </div>
+        <!--**********************************
+            Footer start
+        ***********************************-->
+        <div class="footer">
+            <div class="copyright">
+                <p><%= language.Copyright %> © <%= language.Designed %> &amp; <%= language.Developed_by %> <a href="#" target="_blank">KMS</a> 2024</p>
+            </div>
+        </div>
+        <!--**********************************
+            Footer end
+        ***********************************-->
+
+        </div>
+
+        <!--********** Main wrapper end **********-->
+        <%- include('templet/script')-%>
+</body>
+
+
+</html>
